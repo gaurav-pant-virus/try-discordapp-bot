@@ -9,7 +9,7 @@ class Database(object):
 
     def _create_db(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS search_history (
-            id int primary key AUTOINCREMENT,
+            id INTEGER primary key AUTOINCREMENT,
             timestamp datetime default CURRENT_TIMESTAMP,
             query text
             )'''
