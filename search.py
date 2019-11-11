@@ -3,6 +3,7 @@ import urllib3
 import os
 import re
 from bs4 import BeautifulSoup
+from urllib.parse import unquote
 
 
 class Search(object):
@@ -35,11 +36,11 @@ class Search(object):
             url,
             headers={'User-Agent': os.getenv('USER_AGENT')}
         )
-        soup = BeautifulSoup(response.data, 'html.parser')
+        soup = BeautifulSoup(response.data, 'html.parser', from_encoding='utf-8')
         extract_url = lambda x: re.split('=|&', x.get('href'))[1]
-        all_urls = [extract_url(data) for data in soup.select('h3>a')]
+        all_urls = [extract_url(data) for data in soup.select('.r>a')]
         # remove invalid ruls
-        all_urls = [url for url in all_urls if url.startswith('http')]
+        all_urls = [unquote(url) for url in all_urls if url.startswith('http')]
         return all_urls[:5]
 
     def execute(self, engine, query):
